@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+
+{% block content%}
+			<p>Create your user</p>
+
+			<form action="" method="post">
+				{% csrf_token %}
+				<ul style="list-style-type:none">
+					<li>{{ form.as_ul }}</li>
+					<li><input type="submit" value="Submit" /></li>
+				</ul>
+			</form>
+
+{% endblock %}

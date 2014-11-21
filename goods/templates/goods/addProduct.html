@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+
+{% block header %}
+<title>addProduct</title>
+{% endblock %}
+
+
+{% block content %}
+
+	<form method="post" action="" class="">
+		{% csrf_token %}
+		{{ form.as_ul }}
+		<input type="submit" value="Submit">
+				
+	</form>
+{% endblock %}
+

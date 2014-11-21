@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+
+{% block content %}
+			<p>Index page</p>
+
+			{% if user.is_authenticated %}
+				<p>Welcome {{ user }}</p>
+			{% else %}
+			<form action="" method="post">
+				{% csrf_token %}
+				<ul style="list-style-type:none">
+					<li>{{ form.as_ul }}</li>
+					{% if auth_fail %}
+					<li>Try again</li>
+					{% endif %}
+					<li><input type="submit" value="Login" /></li>
+				</ul>
+			</form>
+			<a href="{% url 'users:createUser' %}">Create a new</a>
+			{% endif %}
+{% endblock %}
