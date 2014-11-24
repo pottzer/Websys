@@ -1,15 +1,14 @@
 from django.shortcuts import render, get_object_or_404
 from django.http import HttpResponse, HttpResponseRedirect
+from django.core.urlresolvers import reverse
 from django.views.generic.base import View
 from django.views.generic import DetailView, TemplateView
-from goods.forms import GoodForm
+from goods.forms import GoodForm, EditProductForm
 from goods.models import Goods
 
 class AddProductView(View):
 	template_name = 'goods/addProduct.html'
 	form_class = GoodForm
-#	initial = {'name': 'product id'}
-#	success_url = ''
 	
 	def get(self, request, *args, **kwargs):
 		return render(request, self.template_name,{'form': self.form_class})
@@ -45,8 +44,16 @@ class EditProductView(TemplateView):
 	model = Goods
 
 	def get(self, request, *args, **kwargs):
-		super(EditProductView, self).get(request, *args, **kwargs)
-		product = get_object_or_404(Goods, id_good=kwargs['id_good'])
-		form = CreateUserForm(None, instance=product)
+		product = get_object_or_404(self.model, id_good = kwargs['productid'])
+		form = EditProductForm(None, instance = product)
 		return render(request, self.template_name, {'form':form})
 
+	def post(self, request, *args, **kwargs):
+		product = get_object_or_404(self.model, id_good = kwargs['productid'])
+		form = EditProductForm(request.POST, instance = product)
+		if form.is_valid():
+			form.save()
+			return HttpResponseRedirect(reverse('goods:ListProductView'))
+		return render(request, self.template_name, {'form':form})
+			
+			
