@@ -2,6 +2,10 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.http import HttpResponseRedirect
 from django.core.urlresolvers import reverse
 from django.views.generic.base import View
+from django.contrib.auth.decorators import login_required
+from django.utils.decorators import method_decorator
+from django.contrib.auth.decorators import login_required
+
 
 from django.contrib import auth
 from generic.views import GenericView
@@ -56,6 +60,7 @@ def createUser(request):
 		form = CreateUserForm()
 	return render(request, 'users/createUser.html', {'form': form})
 
+@login_required(login_url='/')
 def AdminEditUser(request):
 	if request.method == 'POST':
 		print "Delete ", request.POST.get("", "Remove")
@@ -82,6 +87,11 @@ def delUser(request, username):
 class EditUser(GenericView):
 	model = User
 	template_name = 'users/profile.html'
+
+	def dispatch(self, request, *args, **kwargs):
+		if kwargs['username'] == str(request.user):
+			return super(EditUser, self).dispatch(request, *args, **kwargs)
+		return HttpResponseRedirect('/')
 
 	def get(self, request, *args, **kwargs):
 		super(EditUser, self).get(request, *args, **kwargs)
