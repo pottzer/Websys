@@ -12,7 +12,7 @@ class Order(models.Model):
 class OrderItems(models.Model):
 	id_goods = models.ForeignKey(Goods)
 	orderID = models.ForeignKey(Order)
-	price = models.IntegetField()
+	price = models.IntegerField()
 	name = models.CharField(max_length=255)
 
 

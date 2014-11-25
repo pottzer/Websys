@@ -40,6 +40,7 @@ INSTALLED_APPS = (
     'goods',
     'users',
     'generic',
+    'orders',
 )
 
 AUTH_USER_MODEL = 'users.User'
