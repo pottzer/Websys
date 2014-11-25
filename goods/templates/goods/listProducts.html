@@ -21,6 +21,7 @@ hej
 		<td>{{product.id_good}}</td>
 		<td>{{product.stock}}</td>
 		<td><a href="{% url 'goods:EditProductView' product.id_good %}">Edit</a></td>
+		<td><a href="{% url 'goods:DeleteProductView' product.id_good %}">Delete</a></td>
 	</tr>
 		{% endfor %}		
 {% endblock %}

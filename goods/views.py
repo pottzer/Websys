@@ -56,4 +56,11 @@ class EditProductView(TemplateView):
 			return HttpResponseRedirect(reverse('goods:ListProductView'))
 		return render(request, self.template_name, {'form':form})
 			
-			
+class DeleteProductView(TemplateView):
+	template_name = 'goods/deleteProduct.html'
+	model = Goods
+	
+	def get(self, request, *args, **kwargs):
+		product = get_object_or_404(self.model, id_good = kwargs['productid'])
+		product.delete()
+		return HttpResponseRedirect(reverse('goods:ListProductView'))		
