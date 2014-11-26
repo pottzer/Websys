@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h1>Your order history</h1>
+
+<table border="1">
+	<tr>
+		<td>Order number</td>
+		<td>Date</td>
+		<td></td>
+	{% for order in order_list %}
+		<tr>
+			<td>{{ order.orderID }}</td>
+			<td>{{ order.date }}</td>
+			<td><a href="{% url 'orders:ListUserOrderItems' order.orderID%}">Product details</a>
+		</tr>
+	{% endfor %}
+</table>
+
+
+{% endblock %}
