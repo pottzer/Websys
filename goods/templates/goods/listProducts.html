@@ -22,6 +22,7 @@ hej
 		<td>{{product.stock}}</td>
 		<td><a href="{% url 'goods:EditProductView' product.id_good %}">Edit</a></td>
 		<td><a href="{% url 'goods:DeleteProductView' product.id_good %}">Delete</a></td>
+		<td><a href="{% url 'shopping:AddProductShoppingcart' product.id_good %}">Add to shoppingcart</a></td>
 	</tr>
 		{% endfor %}		
 {% endblock %}
