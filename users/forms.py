@@ -12,3 +12,8 @@ class CreateUserForm(forms.ModelForm):
 		model = User
 		fields = ['firstname', 'lastname', 'ssn', 'email', 'telephone', 'username', 'password']
 
+class AdminEditUserForm(forms.ModelForm):
+	class Meta:
+		model = User
+		fields = ['firstname', 'lastname', 'ssn', 'email', 'telephone', 'username', 'password', 'admin']
+
