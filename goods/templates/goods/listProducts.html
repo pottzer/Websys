@@ -6,7 +6,8 @@
 
 
 {% block content %}
-hej
+<h1>Webshop</h1>
+<div>
 <table>
 	<tr>
 		<th>Product Name</th>
@@ -14,15 +15,13 @@ hej
 		<th>Stock</th>
 		<th></th>
 	</tr>
-	
 		{% for product in products %}
 	<tr>
 		<td><a href="{% url 'goods:ProductView' product.id_good %}">{{product.name}}</a></td>
 		<td>{{product.id_good}}</td>
 		<td>{{product.stock}}</td>
-		<td><a href="{% url 'goods:EditProductView' product.id_good %}">Edit</a></td>
-		<td><a href="{% url 'goods:DeleteProductView' product.id_good %}">Delete</a></td>
 	</tr>
-		{% endfor %}		
+		{% endfor %}
+</div>
 {% endblock %}
 

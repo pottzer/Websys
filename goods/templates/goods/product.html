@@ -6,9 +6,18 @@
 
 
 {% block content %}
-hej {{product.name}}
-
-
+<h1>{{product.name}}</h1>
+<div style="width:150px">
+	<p><b>Description</b><br/>
+	{{product.description}}</p>
+	<p><b>Product nr:</b> {{product.id_good}}</p>
+	<p><b>Price:</b> {{product.price}}:-
+</div>
+<table>
+	<tr>
+		<td><input type="submit" value="Buy"></td>
+		<td>Currently {{product.stock}} left in stock</td>
+</table>
 
 {% endblock %}
 
