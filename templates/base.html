@@ -8,12 +8,20 @@
 
 	<nav>
 		<a href="{% url 'index' %}">Home</a> |
-		<a href="{% url 'goods:ListProductView' %}">Products</a>		|
+		<a href="{% url 'goods:ListProductView' %}">Products</a>
+		{% if user.admin %}
+		|
 		<a href="{% url 'goods:AddProductView' %}">Add Products [A]</a> |
 		<a href="{% url 'users:editUser' %}">Edit Users [A]</a>
+		{% endif %}
 		{% if user.is_authenticated %}
 		|
+<<<<<<< HEAD
 		<a href="{% url 'shopping:Shoppingcart' user.id %}">Shoppingcart</a> |
+=======
+		<a href="/jquery/">Shoppingcart</a> |
+		<a href="{% url 'orders:ListUserOrders' user %}">Your Orders</a> |
+>>>>>>> a0b85ac05b5955bbf69a4b181013ed873bc208dc
 		<a href="{% url 'users:user' user %}">Profile</a>		|
 		{{ user }}, <a href="{% url 'users:logout' %}">Logout</a>
 		{% endif %}
