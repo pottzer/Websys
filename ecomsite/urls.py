@@ -9,6 +9,9 @@ urlpatterns = patterns('',
 	url(r'^system/', include('users.urls', namespace='users')),
 	# Goods URL
 	url(r'^goods/', include('goods.urls', namespace='goods')),
+	#Shopping URL
+	url(r'^shopping/', include('shopping.urls', namespace='shopping')),
+	
 	# Admin URL
     url(r'^admin/', include(admin.site.urls)),
 )
