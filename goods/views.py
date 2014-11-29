@@ -3,6 +3,8 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.core.urlresolvers import reverse
 from django.views.generic.base import View
 from django.views.generic import DetailView, TemplateView
+
+from shopping.models import Inventory
 from goods.forms import GoodForm, EditProductForm
 from goods.models import Goods
 
@@ -22,14 +24,15 @@ class AddProductView(View):
 		print("Failed")
 		return render(request, self.template_name,{'form': self.form_class})
 
-class ListProductView(TemplateView):
+class ListProductView(View):
 	template_name = 'goods/listProducts.html'
 	model = Goods
 	
-	def get_context_data(self, **kwargs):
-		context = super(ListProductView, self).get_context_data(**kwargs)
-		context['products']=Goods.objects.all()
-		return context
+	def get(self, request, *args, **kwargs):
+		productList = Goods.objects.filter(expired=False)
+		
+	#	context['products']=Goods.objects.all()
+		return render(request, self.template_name, {'products':productList})
 
 class ProductView(TemplateView):
 	template_name = 'goods/product.html'
@@ -47,6 +50,7 @@ class EditProductView(TemplateView):
 	def get(self, request, *args, **kwargs):
 		product = get_object_or_404(self.model, id_good = kwargs['productid'])
 		form = EditProductForm(None, instance = product)
+		
 		return render(request, self.template_name, {'form':form})
 
 	def post(self, request, *args, **kwargs):
@@ -54,6 +58,7 @@ class EditProductView(TemplateView):
 		form = EditProductForm(request.POST, instance = product)
 		if form.is_valid():
 			form.save()
+			Inventory.objects.filter(productID__expired=True).delete()
 			return HttpResponseRedirect(reverse('goods:ListProductView'))
 		return render(request, self.template_name, {'form':form})
 

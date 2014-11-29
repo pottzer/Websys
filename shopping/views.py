@@ -29,7 +29,7 @@ class Shoppingcart(View):
 	def get(self, request, *args, **kwargs):
 		u = request.user
 		s = ShoppingCart.objects.get(username=u)
-		products = s.inventory_set.filter(shopping_cartID = s.id)
+		products = s.inventory_set.filter(shopping_cartID = s.id )
 		print(products)
 		
 		return render(request, self.template_name, {'inventory':products})
@@ -41,10 +41,10 @@ class AddProductShoppingcart(View):
 		p = Goods.objects.get(id_good=productID)
 		s = ShoppingCart.objects.get(username=request.user.id)
 		i = s.inventory_set.filter(productID = p.id_good)
-		if len(i) == 0:
+		if len(i) == 0 and p.expired==False:
 			print ("HEJ")
 			s.inventory_set.create(productID = p, shopping_cartID = s, quantity = '1')
-		else:
+		elif p.expired==False:
 			print ("fulfan")
 			q = i[0].quantity
 			i.delete()
