@@ -14,5 +14,4 @@ class OrderItems(models.Model):
 	orderID = models.ForeignKey(Order)
 	price = models.IntegerField()
 	name = models.CharField(max_length=255)
-
-
+	quantity = models.IntegerField(default=1)
