@@ -4,7 +4,8 @@ from users.models import User
 from goods.models import Goods
 
 class ShoppingCart(models.Model):
-	username = models.ForeignKey(User)
+	#username = models.ForeignKey(User)
+	username = models.OneToOneField(User)
 
 
 class Inventory(models.Model):

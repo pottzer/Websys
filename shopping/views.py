@@ -17,16 +17,17 @@ class Shoppingcart(View):
 		print str(request.user.id)
 		if kwargs['userid'] == str(request.user.id):
 			u = User.objects.get(username=request.user)
-			args = [u]
-			print("hej")	
-			if len(u.shoppingcart_set.all()) == 0:
-				u.shoppingcart_set.create(username=request.user)
+			try:
+				u.shoppingcart
+			except:
+				ShoppingCart(username=u)
+
+			print("hej")
 			return super(Shoppingcart, self).dispatch(request, *args, **kwargs)
-		print ("Hej")
 		return HttpResponseRedirect('/')
 
 	def get(self, request, *args, **kwargs):
-		u = args[0]
+		u = request.user
 		s = ShoppingCart.objects.get(username=u)
 		products = s.inventory_set.filter(shopping_cartID = s.id)
 		print(products)
