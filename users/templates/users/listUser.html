@@ -1,13 +1,14 @@
 {% extends "base.html" %}
 
 {% block content %}
-<p>Edit Users</p>
-
+<h1>Edit Users [ADMIN]</h1>
+<div>
 <table border="1" style="width:100%">
 	<tr>
 		<td><b>Username</b></td>
 		<td><b>Firstname</b></td>
 		<td><b>Lastname</b></td>
+		<td><b>Admin role</b></td>
 		<td><b>Action</b></td>
 	</tr>
 	{% for user in userlist %}
@@ -15,9 +16,13 @@
 			<td>{{ user.username }}</td>
 			<td>{{ user.firstname }}</td>
 			<td>{{ user.lastname }}</td>
+			<td>{{ user.admin }}</td>
 			<td>
-				<input type="submit" value="Edit">
-				<form action="{% url 'users:delUser' user.username %}" method="post">
+				<form action="{% url 'users:AdminEditUser' user.username %}" method="get">
+					{% csrf_token %}
+					<input type="submit" value="Edit">
+				</form>
+				<form action="{% url 'users:delUser' user.username %}" method="get">
 				{% csrf_token %}
 				<input type="submit" value="Remove">
 				</form>
@@ -25,4 +30,5 @@
 		</tr>
 	{% endfor %}
 </table>
+</div>
 {% endblock %}

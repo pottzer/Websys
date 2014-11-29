@@ -10,7 +10,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib import auth
 from generic.views import GenericView
 from users.backend import Backend
-from users.forms import LoginForm, CreateUserForm
+from users.forms import LoginForm, CreateUserForm, AdminEditUserForm
 from users.models import User
 
 def index(request):
@@ -27,7 +27,7 @@ def index(request):
 				user.backend='users.backend.Backend'
 				user.save()
 				auth.login(request, user)
-				return HttpResponseRedirect('/system/')
+				return HttpResponseRedirect('/')
 				#return render(request, 'users/mainPage.html')
 				#mainPage(request)
 			else:
@@ -38,7 +38,7 @@ def index(request):
 
 
 
-
+#'
 def log(request):
 	print "User is authencated: ",request.user.is_authenticated()
 	if not request.user.is_authenticated():
@@ -60,14 +60,14 @@ def createUser(request):
 		form = CreateUserForm()
 	return render(request, 'users/createUser.html', {'form': form})
 
-@login_required(login_url='/')
-def AdminEditUser(request):
-	if request.method == 'POST':
-		print "Delete ", request.POST.get("", "Remove")
-	user_query = User.objects.values('username', 'firstname', 'lastname').distinct()
-	#for user in user_query:
-	#	context.append(user['username'])
-	return render(request, 'users/listUser.html', {'userlist': user_query})
+
+#def AdminEditUser(request):
+#	if request.method == 'POST':
+#		print "Delete ", request.POST.get("", "Remove")
+#	user_query = User.objects.values('username', 'firstname', 'lastname').distinct()
+#	#for user in user_query:
+#	#	context.append(user['username'])
+#	return render(request, 'users/listUser.html', {'userlist': user_query})
 
 def delUser(request, username):
 	#user = User.objects.get(username=username)
@@ -83,6 +83,34 @@ def delUser(request, username):
 #		return HttpResponseRedirect('/system/')
 #	return render(request, 'users/profile.html', {'form': form})
 
+class AdminEditUser(GenericView):
+	template_name = 'users/profile.html'
+	form = AdminEditUserForm
+
+	def get(self, request, *args, **kwargs):
+		instance = get_object_or_404(User, username=kwargs['username'])
+		form = self.form(None, instance=instance)
+		return render(request, self.template_name, {'form': form})
+
+	def post(self, request, *args, **kwargs):
+		instance = get_object_or_404(User, username=kwargs['username'])
+		form = self.form(request.POST, instance=instance)
+		if form.is_valid():
+			form.save()
+			return HttpResponseRedirect(reverse('users:editUser'))
+		return render(request, self.template_name, {'form': form})
+
+class AdminListUser(GenericView):
+	template_name = 'users/listUser.html'
+
+	def dispatch(self, request, *args, **kwargs):
+		if request.user.is_authenticated() and request.user.admin:
+			return super(AdminListUser, self).dispatch(request, *args, **kwargs)
+		return HttpResponseRedirect('/')
+
+	def get(self, request, *args, **kwargs):
+		user_query = User.objects.values('username', 'firstname', 'lastname', 'admin').distinct()
+		return render(request, self.template_name, {'userlist': user_query})
 
 class EditUser(GenericView):
 	model = User

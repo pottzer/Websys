@@ -6,12 +6,19 @@
 
 
 {% block content %}
-<h1> {{product.name}}</h1>
 
-<img class="" src="{{product.image}}">
-
-<h3>Description</h3>
-{{product.description}}
+<h1>{{product.name}}</h1>
+<div style="width:150px">
+	<p><b>Description</b><br/>
+	{{product.description}}</p>
+	<p><b>Product nr:</b> {{product.id_good}}</p>
+	<p><b>Price:</b> {{product.price}}:-
+</div>
+<table>
+	<tr>
+		<td><a href="{% url 'shopping:AddProductShoppingcart' product.id_good %}"><input type="submit" value="Buy"></a></td>
+		<td>Currently {{product.stock}} left in stock</td>
+</table>
 
 
 {% endblock %}

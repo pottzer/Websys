@@ -16,12 +16,8 @@
 		{% endif %}
 		{% if user.is_authenticated %}
 		|
-<<<<<<< HEAD
 		<a href="{% url 'shopping:Shoppingcart' user.id %}">Shoppingcart</a> |
-=======
-		<a href="/jquery/">Shoppingcart</a> |
 		<a href="{% url 'orders:ListUserOrders' user %}">Your Orders</a> |
->>>>>>> a0b85ac05b5955bbf69a4b181013ed873bc208dc
 		<a href="{% url 'users:user' user %}">Profile</a>		|
 		{{ user }}, <a href="{% url 'users:logout' %}">Logout</a>
 		{% endif %}

@@ -9,14 +9,16 @@ from goods.models import Goods
 class AddProductView(View):
 	template_name = 'goods/addProduct.html'
 	form_class = GoodForm
-	
+
 	def get(self, request, *args, **kwargs):
-		return render(request, self.template_name,{'form': self.form_class})
+		products = Goods.objects.all()
+		return render(request, self.template_name,{'form': self.form_class, 'products': products})
 	def post(self, request, *args, **kwargs):
 		form = self.form_class(request.POST)
 		if form.is_valid():
 			form.save()		
-			return HttpResponseRedirect('/')
+			#return HttpResponseRedirect('/')
+			return self.get(request, *args, **kwargs)
 		print("Failed")
 		return render(request, self.template_name,{'form': self.form_class})
 
@@ -27,7 +29,6 @@ class ListProductView(TemplateView):
 	def get_context_data(self, **kwargs):
 		context = super(ListProductView, self).get_context_data(**kwargs)
 		context['products']=Goods.objects.all()
-
 		return context
 
 class ProductView(TemplateView):
@@ -55,12 +56,12 @@ class EditProductView(TemplateView):
 			form.save()
 			return HttpResponseRedirect(reverse('goods:ListProductView'))
 		return render(request, self.template_name, {'form':form})
-			
+
 class DeleteProductView(TemplateView):
 	template_name = 'goods/deleteProduct.html'
 	model = Goods
-	
+
 	def get(self, request, *args, **kwargs):
 		product = get_object_or_404(self.model, id_good = kwargs['productid'])
 		product.delete()
-		return HttpResponseRedirect(reverse('goods:ListProductView'))		
+		return HttpResponseRedirect(reverse('goods:AddProductView'))
