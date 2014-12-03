@@ -4,6 +4,7 @@ from django.core.urlresolvers import reverse
 from django.views.generic.base import View
 from django.views.generic import DetailView, TemplateView
 
+from orders.models import Order, OrderItems
 from goods.models import Goods
 from users.models import User
 from shopping.models import ShoppingCart, Inventory
@@ -72,5 +73,39 @@ class RemoveProductShoppingcart(View):
 		return HttpResponseRedirect(reverse('shopping:Shoppingcart', args=(request.user.id,)))
 							
 
+class CheckOutView(View):
+ 
+	def get(self, request, *args, **kwargs):
+		O = Order(orderID = '123', username = request.user) #Creating the Order.
+		O.save()
+
+		shoppingcart = ShoppingCart.objects.get(username = request.user.id)
+		inventoryList = Inventory.objects.filter(shopping_cartID = shoppingcart.id)
+		for i in xrange(len(inventoryList)):
+			item = inventoryList[i]
+			product = item.productID
+			productPrice = product.price
+			productName = product.name
+			ShoppingQuantity = inventoryList[i].quantity
+			
+			item.delete()
+			good = Goods.objects.get(id_good = product.id_good)
+			good.stock = (good.stock - ShoppingQuantity)
+			good.save()
+			
+			
+			OI = OrderItems(productID = product, orderID = O, price = productPrice, name = productName, quantity = ShoppingQuantity)		
+			OI.save()
+		
+		return HttpResponseRedirect(reverse('shopping:Shoppingcart', args=(request.user.id,)))	
+	
+	
+		 
+			 
+	
+	
+	
+	
 
 	
+
