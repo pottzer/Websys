@@ -90,7 +90,12 @@ class CheckOutView(View):
 			
 			item.delete()
 			good = Goods.objects.get(id_good = product.id_good)
-			good.stock = (good.stock - ShoppingQuantity)
+			if (good.stock - ShoppingQuantity) >= 0:
+				good.stock = (good.stock - ShoppingQuantity)
+			else:
+				ShoppingQuantity = good.stock
+				good.stock = 0
+				
 			good.save()
 			
 			
