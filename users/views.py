@@ -87,6 +87,11 @@ class AdminEditUser(GenericView):
 	template_name = 'users/profile.html'
 	form = AdminEditUserForm
 
+	def dispatch(self, request, *args, **kwargs):
+		if request.user.is_authenticated() and request.user.admin:
+			return super(AdminEditUser, self).dispatch(request, *args, **kwargs)
+		return HttpResponseRedirect('/')
+
 	def get(self, request, *args, **kwargs):
 		instance = get_object_or_404(User, username=kwargs['username'])
 		form = self.form(None, instance=instance)
