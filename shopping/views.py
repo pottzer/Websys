@@ -76,7 +76,7 @@ class RemoveProductShoppingcart(View):
 class CheckOutView(View):
  
 	def get(self, request, *args, **kwargs):
-		O = Order(orderID = '123', username = request.user) #Creating the Order.
+		O = Order(username = request.user) #Creating the Order.
 		O.save()
 
 		shoppingcart = ShoppingCart.objects.get(username = request.user.id)
