@@ -14,6 +14,12 @@ class AddProductView(View):
 	template_name = 'goods/addProduct.html'
 	form_class = GoodForm
 
+	def dispatch(self, request, *args, **kwargs):
+		if request.user.is_authenticated() and request.user.admin:
+			return super(AddProductView, self).dispatch(request, *args, **kwargs)
+		return HttpResponseRedirect('/')
+
+
 	def get(self, request, *args, **kwargs):
 		products = Goods.objects.all()
 		return render(request, self.template_name,{'form': self.form_class, 'products': products})
@@ -42,7 +48,7 @@ class ProductView(TemplateView):
 
 	def get(self, request, productid):
 		product = Goods.objects.get(id_good = productid)
-		comment_list = product.comment_set.values('name', 'comment_text', 'date').order_by("-date")
+		comment_list = product.comment_set.values('name', 'comment_text', 'date', 'id').order_by("-date")
 		for i in xrange(len(comment_list)):
 			try:
 				comment_list[i]['role'] = "Admin" if User.objects.get(username=comment_list[i]['name']).admin else "Costumer"
@@ -66,6 +72,12 @@ class EditProductView(TemplateView):
 	template_name = 'goods/editProduct.html'
 	model = Goods
 
+	def dispatch(self, request, *args, **kwargs):
+		if request.user.is_authenticated() and request.user.admin:
+			return super(EditProductView, self).dispatch(request, *args, **kwargs)
+		return HttpResponseRedirect('/')
+
+
 	def get(self, request, *args, **kwargs):
 		product = get_object_or_404(self.model, id_good = kwargs['productid'])
 		form = EditProductForm(None, instance = product)
@@ -84,7 +96,27 @@ class DeleteProductView(TemplateView):
 	template_name = 'goods/deleteProduct.html'
 	model = Goods
 
+	def dispatch(self, request, *args, **kwargs):
+		if request.user.is_authenticated() and request.user.admin:
+			return super(DeleteProductView, self).dispatch(request, *args, **kwargs)
+		return HttpResponseRedirect('/')
+
 	def get(self, request, *args, **kwargs):
 		product = get_object_or_404(self.model, id_good = kwargs['productid'])
 		product.delete()
 		return HttpResponseRedirect(reverse('goods:AddProductView'))
+
+class DeleteProductComment(TemplateView):
+
+
+	def dispatch(self, request, *args, **kwargs):
+		if request.user.is_authenticated() and request.user.admin:
+			return super(DeleteProductComment, self).dispatch(request, *args, **kwargs)
+		return HttpResponseRedirect('/')
+
+	def get(self, request, *args, **kwargs):
+		c = Comment.objects.get(id=kwargs['commentid'])
+		print kwargs
+		productID = c.productID.id_good
+		c.delete()
+		return HttpResponseRedirect(reverse('goods:ProductView', args=(productID,)))

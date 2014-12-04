@@ -1,5 +1,5 @@
 from django.conf.urls import url
-from goods.views import AddProductView, ListProductView, ProductView, EditProductView, DeleteProductView
+from goods.views import AddProductView, ListProductView, ProductView, EditProductView, DeleteProductView, DeleteProductComment
 
 
 urlpatterns = [
@@ -8,4 +8,5 @@ urlpatterns = [
 	url(r'^products/(?P<productid>.*)/$', ProductView.as_view(), name = 'ProductView'),
 	url(r'^editproducts/(?P<productid>.*)/$', EditProductView.as_view(), name = 'EditProductView'),
 	url(r'^deleteproduct/(?P<productid>.*)/$', DeleteProductView.as_view(), name = 'DeleteProductView'),
+	url(r'^productcomment/delete/(?P<commentid>.*)/$', DeleteProductComment.as_view(), name="DeleteProductComment"),
 ]
