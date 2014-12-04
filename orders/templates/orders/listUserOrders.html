@@ -10,9 +10,9 @@
 		<td></td>
 	{% for order in order_list %}
 		<tr>
-			<td>{{ order.orderID }}</td>
+			<td>{{ order.id }}</td>
 			<td>{{ order.date }}</td>
-			<td><a href="{% url 'orders:ListUserOrderItems' order.orderID%}">Product details</a>
+			<td><a href="{% url 'orders:ListUserOrderItems' order.id%}">Product details</a>
 		</tr>
 	{% endfor %}
 </table>

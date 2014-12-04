@@ -18,7 +18,7 @@ class ListUserOrders(GenericView):
 		order_qeury = u.order_set.all()
 		order_list = []
 		for order in order_qeury:
-			order_list.append({'orderID': order.orderID, 'date': order.date})
+			order_list.append({'orderID': order.id, 'date': order.date})
 		print 'Finished list: ', order_list
 
 		return render(request, self.template_name, {'order_list': order_qeury})
@@ -27,10 +27,10 @@ class ListUserOrderItems(GenericView):
 	template_name = 'orders/listUserOrderItems.html'
 
 	def dispatch(self, request, *args, **kwargs):
-		if request.user.order_set.filter(orderID=kwargs['orderID']).count() > 0:
+		if request.user.order_set.filter(id=kwargs['orderID']).count() > 0:
 			return super(ListUserOrderItems, self).dispatch(request, *args, **kwargs)
 		return HttpResponseRedirect('/')
 
 	def get(self, request, *args, **kwargs):
-		order = get_object_or_404(Order, orderID=kwargs['orderID'])
+		order = get_object_or_404(Order, id=kwargs['orderID'])
 		return render(request, self.template_name, {'order':order})
