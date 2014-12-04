@@ -4,7 +4,7 @@ from goods.models import Goods
 from django.utils import timezone
 
 class Order(models.Model):
-	orderID = models.IntegerField(primary_key=True)
+	id = models.AutoField(primary_key=True, default=None)
 	username = models.ForeignKey(User)
 	date = models.DateTimeField(default=timezone.now())
 
