@@ -3,10 +3,11 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.core.urlresolvers import reverse
 from django.views.generic.base import View
 from django.views.generic import DetailView, TemplateView
+from django.utils import timezone
 
 from shopping.models import Inventory
-from goods.forms import GoodForm, EditProductForm
-from goods.models import Goods
+from goods.forms import GoodForm, EditProductForm, PostComment
+from goods.models import Goods, Comment
 
 class AddProductView(View):
 	template_name = 'goods/addProduct.html'
@@ -37,11 +38,24 @@ class ListProductView(View):
 class ProductView(TemplateView):
 	template_name = 'goods/product.html'
 	model = Goods
+	form = PostComment
 
 	def get(self, request, productid):
 		product = Goods.objects.get(id_good = productid)
-		print productid
-		return render(request, self.template_name, {'product':product})
+		comment_list = product.comment_set.all()
+		return render(request, self.template_name, {'product':product, 'PostCommentForm': self.form, 'comment_list': comment_list})
+
+	def post(self, request, *args, **kwargs):
+		instance = Goods.objects.get(id_good=kwargs['productid'])
+		form = self.form(request.POST)
+		if form.is_valid():
+			print form
+			c = form.save(commit=False)
+			c.productID = instance
+			c.date = timezone.now()
+			c.name = request.user.username
+			c.save()
+		return HttpResponseRedirect(reverse('goods:ProductView', args=(kwargs['productid'],)))
 
 class EditProductView(TemplateView):
 	template_name = 'goods/editProduct.html'
@@ -50,7 +64,6 @@ class EditProductView(TemplateView):
 	def get(self, request, *args, **kwargs):
 		product = get_object_or_404(self.model, id_good = kwargs['productid'])
 		form = EditProductForm(None, instance = product)
-		
 		return render(request, self.template_name, {'form':form})
 
 	def post(self, request, *args, **kwargs):

@@ -20,7 +20,28 @@
 		<td><a href="{% url 'shopping:AddProductShoppingcart' product.id_good %}"><input type="submit" value="Buy"></a></td>
 		<td>Currently {{product.stock}} left in stock</td>
 </table>
+<br />
+<hr>
+<br />
 
+<div>
+	<form method="post" action="" class="">
+		{% csrf_token %}
+		{{ PostCommentForm.as_ul }}
+		<input type="submit" value="Post">
+	</form>
+</div>
+<hr>
+<div>
+	<table>
+		{% for comment in comment_list %}
+			<tr>
+				<td>{{ comment.name }} : {{ comment.date }}</td>
+				<td>{{ comment.comment_text }}</td>
+			</tr>
+		{% endfor %}
+	</table>
+</div>
 
 {% endblock %}
 
