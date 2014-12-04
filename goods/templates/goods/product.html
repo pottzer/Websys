@@ -38,6 +38,11 @@
 			<tr>
 				<td style="font-weight:normal;background-color:grey;" colspan="2">
 					{{ comment.date }}
+					{% if user.admin %}
+					<span style="float:right">
+						<a href="{% url 'goods:DeleteProductComment' comment.id %}">Delete</a>
+					</span>
+					{% endif %}
 				</td>
 			</tr>
 			<tr style="vertical-align:top">
