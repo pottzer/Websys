@@ -8,6 +8,7 @@ from django.utils import timezone
 from shopping.models import Inventory
 from goods.forms import GoodForm, EditProductForm, PostComment
 from goods.models import Goods, Comment
+from users.models import User
 
 class AddProductView(View):
 	template_name = 'goods/addProduct.html'
@@ -19,7 +20,7 @@ class AddProductView(View):
 	def post(self, request, *args, **kwargs):
 		form = self.form_class(request.POST)
 		if form.is_valid():
-			form.save()		
+			form.save()
 			#return HttpResponseRedirect('/')
 			return self.get(request, *args, **kwargs)
 		print("Failed")
@@ -28,10 +29,9 @@ class AddProductView(View):
 class ListProductView(View):
 	template_name = 'goods/listProducts.html'
 	model = Goods
-	
+
 	def get(self, request, *args, **kwargs):
 		productList = Goods.objects.filter(expired=False)
-		
 	#	context['products']=Goods.objects.all()
 		return render(request, self.template_name, {'products':productList})
 
@@ -42,7 +42,9 @@ class ProductView(TemplateView):
 
 	def get(self, request, productid):
 		product = Goods.objects.get(id_good = productid)
-		comment_list = product.comment_set.all()
+		comment_list = product.comment_set.values('name', 'comment_text', 'date').order_by("-date")
+		for i in xrange(len(comment_list)):
+			comment_list[i]['role'] = "Admin" if User.objects.get(username=comment_list[i]['name']).admin else "Costumer"
 		return render(request, self.template_name, {'product':product, 'PostCommentForm': self.form, 'comment_list': comment_list})
 
 	def post(self, request, *args, **kwargs):
