@@ -32,15 +32,31 @@
 	</form>
 </div>
 <hr>
-<div>
-	<table>
-		{% for comment in comment_list %}
+<div style="width:500px">
+	{% for comment in comment_list %}
+		<table border="1" style="width:100%"><tbody>
 			<tr>
-				<td>{{ comment.name }} : {{ comment.date }}</td>
-				<td>{{ comment.comment_text }}</td>
+				<td style="font-weight:normal;background-color:grey;" colspan="2">
+					{{ comment.date }}
+				</td>
 			</tr>
-		{% endfor %}
-	</table>
+			<tr style="vertical-align:top">
+				<td style="width:100px">
+					<div>
+						<div>
+							{{ comment.name }}
+						</div>
+						<table><tbody><tr><td style="padding:0px !important">Medlem</td></tr></tbody></table>
+					</div>
+				</td>
+				<td>
+					<div>
+						{{ comment.comment_text }}
+					</div>
+				</td>
+			</tr>
+		</tbody></table>
+	{% endfor %}
 </div>
 
 {% endblock %}
