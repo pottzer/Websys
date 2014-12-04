@@ -22,6 +22,7 @@
 		<th>Product Name</th>
 		<th>Product ID</th>
 		<th>Stock</th>
+		<th>Expired</th>
 		<th></th>
 	</tr>
 		{% for product in products %}
@@ -29,6 +30,7 @@
 		<td><a href="{% url 'goods:ProductView' product.id_good %}">{{product.name}}</a></td>
 		<td>{{product.id_good}}</td>
 		<td>{{product.stock}}</td>
+		<td>{{product.expired}}</td>
 		<td><a href="{% url 'goods:EditProductView' product.id_good %}">Edit</a></td>
 		<td><a href="{% url 'goods:DeleteProductView' product.id_good %}">Delete</a></td>
 	</tr>

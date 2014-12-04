@@ -44,7 +44,10 @@ class ProductView(TemplateView):
 		product = Goods.objects.get(id_good = productid)
 		comment_list = product.comment_set.values('name', 'comment_text', 'date').order_by("-date")
 		for i in xrange(len(comment_list)):
-			comment_list[i]['role'] = "Admin" if User.objects.get(username=comment_list[i]['name']).admin else "Costumer"
+			try:
+				comment_list[i]['role'] = "Admin" if User.objects.get(username=comment_list[i]['name']).admin else "Costumer"
+			except:
+				comment_list[i]['role'] = "Account deleted"
 		return render(request, self.template_name, {'product':product, 'PostCommentForm': self.form, 'comment_list': comment_list})
 
 	def post(self, request, *args, **kwargs):
@@ -74,7 +77,7 @@ class EditProductView(TemplateView):
 		if form.is_valid():
 			form.save()
 			Inventory.objects.filter(productID__expired=True).delete()
-			return HttpResponseRedirect(reverse('goods:ListProductView'))
+			return HttpResponseRedirect(reverse('goods:AddProductView'))
 		return render(request, self.template_name, {'form':form})
 
 class DeleteProductView(TemplateView):
