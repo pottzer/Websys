@@ -13,13 +13,15 @@
 		<th>Product Name</th>
 		<th>Product ID</th>
 		<th>Stock</th>
+		<th>Price</th>
 		<th></th>
 	</tr>
 		{% for product in products %}
 	<tr>
 		<td><a href="{% url 'goods:ProductView' product.id_good %}">{{product.name}}</a></td>
 		<td>{{product.id_good}}</td>
-		<td>{{product.stock}}</td>
+		<td>{{product.stock}}st</td>
+		<td>{{product.price}}:-</td>
 
 		<td><a href="{% url 'shopping:AddProductShoppingcart' product.id_good %}">Add to shoppingcart</a></td>
 	</tr>
