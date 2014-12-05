@@ -32,8 +32,10 @@ class Shoppingcart(View):
 		s = ShoppingCart.objects.get(username=u)
 		products = s.inventory_set.filter(shopping_cartID = s.id )
 		print(products)
-		
-		return render(request, self.template_name, {'inventory':products})
+		sum = 0
+		for item in products:
+			sum = sum + item.productID.price
+		return render(request, self.template_name, {'inventory':products, 'sum': sum})
 
 class AddProductShoppingcart(View):
 
@@ -54,24 +56,21 @@ class AddProductShoppingcart(View):
 		return HttpResponseRedirect(reverse('goods:ListProductView'))	 
 
 class RemoveProductShoppingcart(View):
-	
-	def get(self, request, *args, **kwargs):
+
+ 	def get(self, request, *args, **kwargs):
 		productID = kwargs['productid']
 		product = Goods.objects.get(id_good=productID)
 		shoppingcart = ShoppingCart.objects.get(username=request.user.id)
 		inventory = shoppingcart.inventory_set.filter(productID = product.id_good)
 		print (inventory[0].quantity)
-		
 		if (inventory[0].quantity) == 1:
 			inventory[0].delete()
 		elif (inventory[0].quantity) > 1:
 			productQuantity = inventory[0].quantity
 			inventory.delete()
 			shoppingcart.inventory_set.create(productID = product, shopping_cartID = shoppingcart, quantity = productQuantity-1)
-	
-	#	return HttpResponseRedirect('/')	
+	#	return HttpResponseRedirect('/')
 		return HttpResponseRedirect(reverse('shopping:Shoppingcart', args=(request.user.id,)))
-							
 
 class CheckOutView(View):
  
