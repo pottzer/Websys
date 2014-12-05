@@ -17,19 +17,22 @@
 </div>
 <table>
 	<tr>
+		{% if user.is_authenticated %}
 		<td><a href="{% url 'shopping:AddProductShoppingcart' product.id_good %}"><input type="submit" value="Buy"></a></td>
+		{% endif %}
 		<td>Currently {{product.stock}} left in stock</td>
 </table>
+{% if user.is_authenticated %}
 <br />
 <hr>
 <br />
-
 <div>
 	<form method="post" action="" class="">
 		{% csrf_token %}
 		{{ PostCommentForm.as_ul }}
 		<input type="submit" value="Post">
 	</form>
+{% endif %}
 </div>
 <hr>
 <div style="width:500px">

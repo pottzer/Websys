@@ -16,14 +16,13 @@ class Shoppingcart(View):
 
 	def dispatch(self, request, *args, **kwargs):
 		print str(request.user.id)
-		if kwargs['userid'] == str(request.user.id):
+		if request.user.is_authenticated() and kwargs['userid'] == str(request.user.id):
 			u = User.objects.get(username=request.user)
 			try:
 				u.shoppingcart
 			except:
-				ShoppingCart(username=u)
-
-			print("hej")
+				S = ShoppingCart(username=u)
+				S.save()
 			return super(Shoppingcart, self).dispatch(request, *args, **kwargs)
 		return HttpResponseRedirect('/')
 
@@ -38,6 +37,11 @@ class Shoppingcart(View):
 		return render(request, self.template_name, {'inventory':products, 'sum': sum})
 
 class AddProductShoppingcart(View):
+	
+	def dispatch(self, request, *args, **kwargs):
+		if not request.user == None:
+			return HttpResponseRedirect('/')
+		return super(AddProductShoppingcart, self).dispatch(request, *args, **kwargs)
 
 	def get(self, request, *args, **kwargs):
 		productID = kwargs['productid'] 

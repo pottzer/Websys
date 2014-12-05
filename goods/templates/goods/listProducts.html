@@ -22,8 +22,9 @@
 		<td>{{product.id_good}}</td>
 		<td>{{product.stock}}st</td>
 		<td>{{product.price}}:-</td>
-
+		{% if user.is_authenticated %} 
 		<td><a href="{% url 'shopping:AddProductShoppingcart' product.id_good %}">Add to shoppingcart</a></td>
+		{% endif %}
 	</tr>
 		{% endfor %}
 </div>
