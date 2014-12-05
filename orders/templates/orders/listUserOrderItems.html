@@ -6,15 +6,22 @@
 	<tr>
 		<td>Item</td>
 		<td>Product number</td>
+		<td>Quantity</td>
 		<td>Price</td>
 	</tr>
 	{% for item in order.orderitems_set.all %}
 		<tr>
 			<td>{{ item.name }}</td>
 			<td>{{ item.productID.id_good }}</td>
+			<td>{{ item.quantity }}</td>
 			<td>{{ item.price }}</td>
 		</tr>
 	{% endfor %}
+	<tr>
+		<td colspan="4">
+			Total netto: {{ sum }}
+		</td>
+	</tr>
 </table>
 
 {% endblock %}

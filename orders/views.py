@@ -33,4 +33,7 @@ class ListUserOrderItems(GenericView):
 
 	def get(self, request, *args, **kwargs):
 		order = get_object_or_404(Order, id=kwargs['orderID'])
-		return render(request, self.template_name, {'order':order})
+		sum = 0
+		for item in order.orderitems_set.all():
+			sum = sum + (item.price*item.quantity)
+		return render(request, self.template_name, {'order':order, 'sum': sum})
