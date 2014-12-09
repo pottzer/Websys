@@ -48,13 +48,16 @@ class AddProductShoppingcart(View):
 	def get(self, request, *args, **kwargs):
 		productID = kwargs['productid'] 
 		p = Goods.objects.get(id_good=productID)
-		s = ShoppingCart.objects.get(username=request.user.id)
+		try: 
+			s = ShoppingCart.objects.get(username=request.user.id)
+		except:
+			s = ShoppingCart(username=request.user)
+			s.save()
+			
 		i = s.inventory_set.filter(productID = p.id_good)
 		if len(i) == 0 and p.expired==False:
-			print ("HEJ")
 			s.inventory_set.create(productID = p, shopping_cartID = s, quantity = '1')
 		elif p.expired==False:
-			print ("fulfan")
 			i[0].quantity += 1
 			i[0].save()		
 		return HttpResponseRedirect(reverse('goods:ListProductView'))	 
