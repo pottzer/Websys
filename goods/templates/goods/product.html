@@ -8,20 +8,49 @@
 {% block content %}
 
 <h1>{{product.name}}</h1>
-<div style="width:150px">
+<div style="width:500px">
 	<p><b>Description</b><br/>
 	{{product.description}}</p>
 	<img src="{{product.image}}" style="width:150px">
 	<p><b>Product nr:</b> {{product.id_good}}</p>
-	<p><b>Price:</b> {{product.price}}:-
+	<p><b>Price:</b> {{product.price}}:-</p>
+	<p><b>Rating:</b> {{average}}</p>
 </div>
+<style>
+	.ex{
+		overflow: hidden;
+		white-space: no-wrap;
+	}
+</style>
+
+<table>
+	<tr>
+		<td>
+			<div class="ex">
+			{% if showReview %}
+			<form method="post" action="">
+				{% csrf_token %}
+				<input type="submit" name="postRating" value="Rate it">
+				{% for field in PostReviewForm %}
+					{{ field }}
+				{% endfor %}
+			</form>
+			{% else %}
+			<span style="color: green">You have rated this product</span><br>
+			{% endif %}
+		</div>
+		</td>
+	</tr>
+</table>
 <table>
 	<tr>
 		{% if user.is_authenticated %}
-		<td><a href="{% url 'shopping:AddProductShoppingcart' product.id_good %}"><input type="submit" value="Buy"></a></td>
+		<td><a href="{% url 'shopping:AddProductShoppingcart' product.id_good %}"><input type="submit" name="postComment" value="Buy"></a></td>
 		{% endif %}
 		<td>Currently {{product.stock}} left in stock</td>
+	</tr>
 </table>
+
 {% if user.is_authenticated %}
 <br />
 <hr>

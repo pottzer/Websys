@@ -6,8 +6,8 @@ from django.views.generic import DetailView, TemplateView
 from django.utils import timezone
 
 from shopping.models import Inventory
-from goods.forms import GoodForm, EditProductForm, PostComment
-from goods.models import Goods, Comment
+from goods.forms import GoodForm, EditProductForm, PostComment, PostReview
+from goods.models import Goods, Comment, Review
 from users.models import User
 
 class AddProductView(View):
@@ -46,7 +46,7 @@ class ListProductView(View):
 class ProductView(TemplateView):
 	template_name = 'goods/product.html'
 	model = Goods
-	form = PostComment
+	form = [PostComment, PostReview]
 
 	def get(self, request, productid):
 		#Sends the product information
@@ -59,18 +59,46 @@ class ProductView(TemplateView):
 				comment_list[i]['role'] = "Admin" if User.objects.get(username=comment_list[i]['name']).admin else "Costumer"
 			except:
 				comment_list[i]['role'] = "Account deleted"
-		return render(request, self.template_name, {'product':product, 'PostCommentForm': self.form, 'comment_list': comment_list})
+
+		#Calculate Rating
+		r = Review.objects.filter(productID=product)
+		print r
+		nRating = r.count()
+		if not nRating == 0:
+			sRating = 0
+			for review in r:
+				sRating += int(review.rating)
+			print "number of rating", nRating
+			print "all rating sum ", sRating
+			average = float(sRating)/float(nRating)
+			average = "{0:.2f}".format(average)
+		else:
+			average = "Has no rating"
+		#Get if already rated
+		showReview = not product.review_set.filter(userID=request.user).exists()
+		print showReview
+		return render(request, self.template_name, {'product':product, 'PostReviewForm': self.form[1], 'PostCommentForm': self.form[0], 'comment_list': comment_list, 'showReview': showReview, 'average': average})
 
 	def post(self, request, *args, **kwargs):
-		#The function for adding a comment for the specifick product
-		instance = Goods.objects.get(id_good=kwargs['productid'])
-		form = self.form(request.POST)
-		if form.is_valid():
-			c = form.save(commit=False)
-			c.productID = instance
-			c.date = timezone.now()
-			c.name = request.user.username
-			c.save()
+		if "postRating" in request.POST:
+			instance = Goods.objects.get(id_good=kwargs['productid'])
+			form = self.form[1](request.POST)
+			print "Violating integrity constraint: ", instance.review_set.filter(userID=request.user).exists()
+			if form.is_valid() and not instance.review_set.filter(userID=request.user).exists():
+				c = form.save(commit=False)
+				c.productID = instance
+				c.userID = request.user
+				c.save()
+		else:
+			#The function for adding a comment for the specifick product
+			instance = Goods.objects.get(id_good=kwargs['productid'])
+			form = self.form[0](request.POST)
+			if form.is_valid():
+				c = form.save(commit=False)
+				c.productID = instance
+				c.date = timezone.now()
+				c.name = request.user.username
+				c.save()
 		return HttpResponseRedirect(reverse('goods:ProductView', args=(kwargs['productid'],)))
 
 class EditProductView(TemplateView):

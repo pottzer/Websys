@@ -1,5 +1,5 @@
 from django.forms import ModelForm, Textarea
-from goods.models import Goods, Comment
+from goods.models import Goods, Comment, Review
 
 class GoodForm(ModelForm):
 	class Meta:
@@ -7,8 +7,8 @@ class GoodForm(ModelForm):
 		fields	= ['id_good', 'name', 'price', 'image', 'stock', 'description', 'expired']
 		widgets = {'description': Textarea()}
 
-class EditProductForm(ModelForm): 
-	class Meta: 
+class EditProductForm(ModelForm):
+	class Meta:
 		model = Goods
 		fields = ['name', 'price', 'image', 'stock', 'description', 'expired']
 		widgets = {'description': Textarea()}
@@ -18,3 +18,8 @@ class PostComment(ModelForm):
 		model = Comment
 		fields = ['comment_text']
 		widgets = {'comment_text': Textarea()}
+
+class PostReview(ModelForm):
+	class Meta:
+		model = Review
+		fields = ['rating']
