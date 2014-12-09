@@ -4,6 +4,7 @@ from django.core.urlresolvers import reverse
 from django.views.generic.base import View
 from django.views.generic import DetailView, TemplateView
 
+
 from orders.models import Order, OrderItems
 from goods.models import Goods
 from users.models import User
@@ -39,7 +40,8 @@ class Shoppingcart(View):
 class AddProductShoppingcart(View):
 	
 	def dispatch(self, request, *args, **kwargs):
-		if not request.user == None:
+		print(request.user)
+		if request.user == 'AnonymousUser':
 			return HttpResponseRedirect('/')
 		return super(AddProductShoppingcart, self).dispatch(request, *args, **kwargs)
 
@@ -53,10 +55,8 @@ class AddProductShoppingcart(View):
 			s.inventory_set.create(productID = p, shopping_cartID = s, quantity = '1')
 		elif p.expired==False:
 			print ("fulfan")
-			q = i[0].quantity
-			i.delete()
-			s.inventory_set.create(productID = p, shopping_cartID =s, quantity = q+1)	
-		
+			i[0].quantity += 1
+			i[0].save()		
 		return HttpResponseRedirect(reverse('goods:ListProductView'))	 
 
 class RemoveProductShoppingcart(View):
@@ -66,25 +66,32 @@ class RemoveProductShoppingcart(View):
 		product = Goods.objects.get(id_good=productID)
 		shoppingcart = ShoppingCart.objects.get(username=request.user.id)
 		inventory = shoppingcart.inventory_set.filter(productID = product.id_good)
-		print (inventory[0].quantity)
+	
 		if (inventory[0].quantity) == 1:
 			inventory[0].delete()
+
 		elif (inventory[0].quantity) > 1:
 			productQuantity = inventory[0].quantity
 			inventory.delete()
 			shoppingcart.inventory_set.create(productID = product, shopping_cartID = shoppingcart, quantity = productQuantity-1)
-	#	return HttpResponseRedirect('/')
+
 		return HttpResponseRedirect(reverse('shopping:Shoppingcart', args=(request.user.id,)))
 
 class CheckOutView(View):
+	error_template ='shopping/checkOutError.html' 
  
 	def get(self, request, *args, **kwargs):
 		O = Order(username = request.user) #Creating the Order.
-		O.save()
-
+	
 		shoppingcart = ShoppingCart.objects.get(username = request.user.id)
 		inventoryList = Inventory.objects.filter(shopping_cartID = shoppingcart.id)
-		for i in xrange(len(inventoryList)):
+		lengthInventory = len(inventoryList)
+		
+		if lengthInventory == 0:
+			return render(request, self.error_template,)
+				
+		O.save()
+		for i in xrange(lengthInventory):
 			item = inventoryList[i]
 			product = item.productID
 			productPrice = product.price
@@ -96,15 +103,12 @@ class CheckOutView(View):
 			if (good.stock - ShoppingQuantity) >= 0:
 				good.stock = (good.stock - ShoppingQuantity)
 			else:
-				ShoppingQuantity = good.stock
-				good.stock = 0
-				
+				O.delete()
+				return render(request, self.error_template,{'product': product})	
 			good.save()
-			
-			
 			OI = OrderItems(productID = product, orderID = O, price = productPrice, name = productName, quantity = ShoppingQuantity)		
-			OI.save()
-		
+			OI.save()		
+
 		return HttpResponseRedirect(reverse('shopping:Shoppingcart', args=(request.user.id,)))	
 	
 	
