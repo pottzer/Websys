@@ -105,6 +105,8 @@ class CheckOutView(View):
 			good = Goods.objects.get(id_good = product.id_good)
 			if (good.stock - ShoppingQuantity) >= 0:
 				good.stock = (good.stock - ShoppingQuantity)
+				if good.stock == 0:
+					good.expired = True
 			else:
 				O.delete()
 				return render(request, self.error_template,{'product': product})	
