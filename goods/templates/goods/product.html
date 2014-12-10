@@ -27,7 +27,7 @@
 	<tr>
 		<td>
 			<div class="ex">
-			{% if showReview %}
+			{% if showReview == True %}
 			<form method="post" action="">
 				{% csrf_token %}
 				<input type="submit" name="postRating" value="Rate it">
@@ -35,7 +35,7 @@
 					{{ field }}
 				{% endfor %}
 			</form>
-			{% else %}
+			{% elif showReview == False %}
 			<span style="color: green">You have rated this product</span><br>
 			{% endif %}
 		</div>
