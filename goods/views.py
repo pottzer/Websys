@@ -75,7 +75,11 @@ class ProductView(TemplateView):
 		else:
 			average = "Has no rating"
 		#Get if already rated
-		showReview = not product.review_set.filter(userID=request.user).exists()
+		print request.user
+		if not request.user.is_authenticated():
+			showReview = None
+		else:
+			showReview = not product.review_set.filter(userID=request.user).exists()
 		print showReview
 		return render(request, self.template_name, {'product':product, 'PostReviewForm': self.form[1], 'PostCommentForm': self.form[0], 'comment_list': comment_list, 'showReview': showReview, 'average': average})
 
