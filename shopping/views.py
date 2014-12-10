@@ -101,17 +101,21 @@ class CheckOutView(View):
 			productName = product.name
 			ShoppingQuantity = inventoryList[i].quantity
 			
-			item.delete()
 			good = Goods.objects.get(id_good = product.id_good)
 			if (good.stock - ShoppingQuantity) >= 0:
 				good.stock = (good.stock - ShoppingQuantity)
+				if good.stock == 0:
+					good.expired = True
 			else:
 				O.delete()
 				return render(request, self.error_template,{'product': product})	
 			good.save()
 			OI = OrderItems(productID = product, orderID = O, price = productPrice, name = productName, quantity = ShoppingQuantity)		
 			OI.save()		
-
+		
+		#for i in xrange(lengthInentory):
+		#	inventoryList[i].delete()
+		
 		return HttpResponseRedirect(reverse('shopping:Shoppingcart', args=(request.user.id,)))	
 	
 	
