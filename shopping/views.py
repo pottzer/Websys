@@ -113,12 +113,11 @@ class CheckOutView(View):
 			OI = OrderItems(productID = product, orderID = O, price = productPrice, name = productName, quantity = ShoppingQuantity)		
 			OI.save()		
 		
-		#for i in xrange(lengthInentory):
-		#	inventoryList[i].delete()
+		for i in xrange(lengthInventory):
+			inventoryList[i].delete()
 		
 		return HttpResponseRedirect(reverse('shopping:Shoppingcart', args=(request.user.id,)))	
-	
-	
+		
 		 
 			 
 	

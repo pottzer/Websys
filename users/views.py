@@ -12,6 +12,7 @@ from generic.views import GenericView
 from users.backend import Backend
 from users.forms import LoginForm, CreateUserForm, AdminEditUserForm
 from users.models import User
+from shopping.models import ShoppingCart, Inventory
 
 def index(request):
 	print index
@@ -94,8 +95,11 @@ class AdminEditUser(GenericView):
 
 	def get(self, request, *args, **kwargs):
 		instance = get_object_or_404(User, username=kwargs['username'])
+		S = ShoppingCart.objects.get(username = instance.id)
+		I = Inventory.objects.filter(shopping_cartID = S.id)
+		print(I)	
 		form = self.form(None, instance=instance)
-		return render(request, self.template_name, {'form': form})
+		return render(request, self.template_name, {'form': form, 'Inventory': I, 'customer':instance,})
 
 	def post(self, request, *args, **kwargs):
 		instance = get_object_or_404(User, username=kwargs['username'])
