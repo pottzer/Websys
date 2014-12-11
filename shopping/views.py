@@ -34,7 +34,7 @@ class Shoppingcart(View):
 		print(products)
 		sum = 0
 		for item in products:
-			sum = sum + item.productID.price
+			sum = sum + item.productID.price*item.quantity
 		return render(request, self.template_name, {'inventory':products, 'sum': sum})
 
 class AddProductShoppingcart(View):
