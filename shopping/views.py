@@ -33,8 +33,11 @@ class Shoppingcart(View):
 		products = s.inventory_set.filter(shopping_cartID = s.id )
 		print(products)
 		sum = 0
-		for item in products:
+		
+		for item in products:	
 			sum = sum + item.productID.price*item.quantity
+		
+		
 		return render(request, self.template_name, {'inventory':products, 'sum': sum})
 
 class AddProductShoppingcart(View):
@@ -104,8 +107,6 @@ class CheckOutView(View):
 			good = Goods.objects.get(id_good = product.id_good)
 			if (good.stock - ShoppingQuantity) >= 0:
 				good.stock = (good.stock - ShoppingQuantity)
-				if good.stock == 0:
-					good.expired = True
 			else:
 				O.delete()
 				return render(request, self.error_template,{'product': product})	
