@@ -1,11 +1,13 @@
 <!DOCTYPE html>
+{% load staticfiles %}
 <html>
 	<head>
+		{% load staticfiles %}
+		<link rel="stylesheet" type="text/css" href="{% static "base.css" %}">
 		{% block head%}{% endblock %}
 	</head>
 
 	<body>
-
 	<nav>
 		<a href="{% url 'index' %}">Home</a> |
 		<a href="{% url 'goods:ListProductView' %}">Products</a>
@@ -21,7 +23,7 @@
 		<a href="{% url 'users:user' user %}">Profile</a>		|
 		{{ user }}, <a href="{% url 'users:logout' %}">Logout</a>
 		{% endif %}
-	</nav>
+		</nav>
 	{% block content %}{% endblock %}
 	</body>
 </html>

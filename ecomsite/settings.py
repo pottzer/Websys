@@ -95,6 +95,12 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
+#STATICFILES_DIRS = (
+#		'/var/www/david/websystem/static',
+#		)
+
 MEDIA_ROOT = '/media/pictures/'
 
 AUTHENTICATION_BACKENDS = ( 'users.backend.Backend' )
+
+from local_settings import *
