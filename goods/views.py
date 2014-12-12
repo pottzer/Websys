@@ -28,8 +28,9 @@ class AddProductView(View):
 		return render(request, self.template_name,{'form': self.form_class, 'products': products})
 	def post(self, request, *args, **kwargs):
 		#Checks that the values in the form is valid and then saves it.
-		form = self.form_class(request.POST)
+		form = self.form_class(request.POST, request.FILES)
 		if form.is_valid():
+			#newform = Goods(image = request.FILES['image'])
 			form.save()
 			return self.get(request, *args, **kwargs)
 		return render(request, self.template_name,{'form': self.form_class})

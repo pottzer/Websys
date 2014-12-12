@@ -95,6 +95,6 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
-MEDIA_ROOT = '/media/pictures/'
+MEDIA_ROOT = '/home/pottzer/Websys/media/'
 
 AUTHENTICATION_BACKENDS = ( 'users.backend.Backend' )
