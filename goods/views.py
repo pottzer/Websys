@@ -1,4 +1,4 @@
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render, get_object_or_404, RequestContext
 from django.http import HttpResponse, HttpResponseRedirect
 from django.core.urlresolvers import reverse
 from django.views.generic.base import View
@@ -52,7 +52,6 @@ class ProductView(TemplateView):
 	def get(self, request, productid):
 		#Sends the product information
 		product = Goods.objects.get(id_good = productid)
-		
 		#Sends all the comments of the product
 		comment_list = product.comment_set.values('name', 'comment_text', 'date', 'id').order_by("-date")
 		for i in xrange(len(comment_list)):

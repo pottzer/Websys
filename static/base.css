@@ -1,0 +1,14 @@
+nav {
+	display: block;
+	background-color: yellow;
+	border: 1px dotted grey;
+	max-height: 340px;
+	padding-right: 15px;
+	overflow-x: visible;
+	border-top: inset 0 1px 0 rgba(255,255,255,0.1);
+}
+input {
+	display: block;
+	border: 1px solid #999;
+	padding: 7px;
+}
