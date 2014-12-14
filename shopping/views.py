@@ -16,9 +16,10 @@ class Shoppingcart(View):
 	template_name = 'shopping/shoppingcart.html'
 
 	def dispatch(self, request, *args, **kwargs):
-		print str(request.user.id)
+		#Checks if you are logged in.
 		if request.user.is_authenticated() and kwargs['userid'] == str(request.user.id):
 			u = User.objects.get(username=request.user)
+			#Checks if you got a shoppingcart if not it creates one
 			try:
 				u.shoppingcart
 			except:
@@ -27,7 +28,9 @@ class Shoppingcart(View):
 			return super(Shoppingcart, self).dispatch(request, *args, **kwargs)
 		return HttpResponseRedirect('/')
 
+
 	def get(self, request, *args, **kwargs):
+		#Prints out all the products from the users inventory list
 		u = request.user
 		s = ShoppingCart.objects.get(username=u)
 		products = s.inventory_set.filter(shopping_cartID = s.id )
@@ -37,13 +40,12 @@ class Shoppingcart(View):
 		for item in products:	
 			sum = sum + item.productID.price*item.quantity
 		
-		
 		return render(request, self.template_name, {'inventory':products, 'sum': sum})
 
 class AddProductShoppingcart(View):
 	
 	def dispatch(self, request, *args, **kwargs):
-		print(request.user)
+	
 		if request.user == 'AnonymousUser':
 			return HttpResponseRedirect('/')
 		return super(AddProductShoppingcart, self).dispatch(request, *args, **kwargs)

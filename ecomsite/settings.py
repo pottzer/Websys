@@ -95,11 +95,15 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
+#<<<<<<< HEAD
+MEDIA_ROOT = '/home/pottzer/Websys/media/'
+#=======
 #STATICFILES_DIRS = (
 #		'/var/www/david/websystem/static',
 #		)
 
 MEDIA_ROOT = '/media/pictures/'
+#>>>>>>> d222d9de316969f29e0dcfae032dfc6eb3080c51
 
 AUTHENTICATION_BACKENDS = ( 'users.backend.Backend' )
 
