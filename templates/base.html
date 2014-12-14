@@ -8,7 +8,8 @@
 	</head>
 
 	<body>
-	<nav>
+		<span class="title_head">E-commerce</span>
+		<nav>
 		<a href="{% url 'index' %}">Home</a> |
 		<a href="{% url 'goods:ListProductView' %}">Products</a>
 		{% if user.admin %}
@@ -24,6 +25,9 @@
 		{{ user }}, <a href="{% url 'users:logout' %}">Logout</a>
 		{% endif %}
 		</nav>
-	{% block content %}{% endblock %}
+	<div class="content">
+		{% block content %}{% endblock %}
+	</div>
+	<div class="ext"><p>&copy; David and Pontus - e-commerce</p></div>
 	</body>
 </html>
