@@ -85,7 +85,7 @@ def delUser(request, username):
 #	return render(request, 'users/profile.html', {'form': form})
 
 class AdminEditUser(GenericView):
-	template_name = 'users/profile.html'
+	template_name = 'users/adminprofile.html'
 	form = AdminEditUserForm
 
 	def dispatch(self, request, *args, **kwargs):
