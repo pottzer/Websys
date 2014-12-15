@@ -14,7 +14,7 @@ class AddProductView(View):
 	#The view to add a product in the shop system
 	template_name = 'goods/addProduct.html'
 	form_class = GoodForm
-
+	products = Goods.objects.all()
 	def dispatch(self, request, *args, **kwargs):
 		#A check that makes sure you are logged in and has the role as admin  
 		if request.user.is_authenticated() and request.user.admin:
@@ -24,8 +24,8 @@ class AddProductView(View):
 
 	def get(self, request, *args, **kwargs):
 		#Sends the form for the model Goods
-		products = Goods.objects.all()
-		return render(request, self.template_name,{'form': self.form_class, 'products': products})
+		
+		return render(request, self.template_name,{'form': self.form_class, 'products': self.products})
 	def post(self, request, *args, **kwargs):
 		#Checks that the values in the form is valid and then saves it.
 		form = self.form_class(request.POST, request.FILES)
@@ -33,7 +33,7 @@ class AddProductView(View):
 			#newform = Goods(image = request.FILES['image'])
 			form.save()
 			return self.get(request, *args, **kwargs)
-		return render(request, self.template_name,{'form': self.form_class})
+		return render(request, self.template_name,{'form': self.form_class, 'products': self.products})
 
 class ListProductView(View):
 	template_name = 'goods/listProducts.html'
