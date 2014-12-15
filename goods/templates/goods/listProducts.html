@@ -8,7 +8,7 @@
 {% block content %}
 <h1>Webshop</h1>
 <div>
-<table>
+<table border=1" class="tb">
 	<tr>
 		<th>Product Name</th>
 		<th>Product ID</th>
@@ -26,7 +26,8 @@
 		<td><a href="{% url 'shopping:AddProductShoppingcart' product.id_good %}">Add to shoppingcart</a></td>
 		{% endif %}
 	</tr>
-		{% endfor %}
+	{% endfor %}
+</table>
 </div>
 {% endblock %}
 
