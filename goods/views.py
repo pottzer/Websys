@@ -24,8 +24,8 @@ class AddProductView(View):
 
 	def get(self, request, *args, **kwargs):
 		#Sends the form for the model Goods
-		
-		return render(request, self.template_name,{'form': self.form_class, 'products': self.products})
+		p = Goods.objects.all()
+		return render(request, self.template_name,{'form': self.form_class, 'products': p})
 	def post(self, request, *args, **kwargs):
 		#Checks that the values in the form is valid and then saves it.
 		form = self.form_class(request.POST, request.FILES)

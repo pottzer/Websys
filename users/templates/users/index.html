@@ -8,13 +8,12 @@
 			<h1>Sign in</h1>
 			<form action="" method="post">
 				{% csrf_token %}
-				<ul style="list-style-type:none">
-					<li>{{ form.as_ul }}</li>
+				{{ form.as_ul }}
 					{% if auth_fail %}
-					<li>Try again</li>
+						<p style="color:red;">Try again</p>
 					{% endif %}
-					<li><input type="submit" value="Login" /></li>
-				</ul>
+
+				<button type="submit" class="btn btn-primary">Login</button>			
 			</form>
 			<a href="{% url 'users:createUser' %}">Create a new</a>
 			{% endif %}

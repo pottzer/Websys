@@ -2,14 +2,14 @@
 
 {% block content %}
 <h1>Edit Users [ADMIN]</h1>
-<div>
-<table border="1" class="tb">
+<div style="width:500px;">
+<table class="table" >
 	<tr>
-		<td><b>Username</b></td>
-		<td><b>Firstname</b></td>
-		<td><b>Lastname</b></td>
-		<td><b>Admin role</b></td>
-		<td><b>Action</b></td>
+		<th>Username</th>
+		<th>Firstname</th>
+		<th>Lastname</th>
+		<th>Admin role</th>
+		<th colspan="2"></th>
 	</tr>
 	{% for user in userlist %}
 		<tr>
@@ -20,11 +20,14 @@
 			<td>
 				<form action="{% url 'users:AdminEditUser' user.username %}" method="get">
 					{% csrf_token %}
-					<input type="submit" value="Edit">
+					<button type="submit" value="Edit" class="btn btn-info" style="margin-top:0px;">Edit</button>
 				</form>
+			</td>
+			<td>
 				<form action="{% url 'users:delUser' user.username %}" method="get">
 				{% csrf_token %}
-				<input type="submit" value="Remove">
+				<button type="submit" value"Remove" class="btn btn-danger" style="margin-top:0px;">	Delete
+				</button>
 				</form>
 			</td>
 		</tr>

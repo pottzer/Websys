@@ -7,17 +7,19 @@
 
 {% block content %}
 <h1>Add Product [ADMIN]</h1>
-<div>
-	<form method="post" action="" class="">
+<div class="form-group">
+	<form method="post" action="" role="form">
 		{% csrf_token %}
 		{{ form.as_ul }}
-		<input type="submit" value="Submit">
+		<button class="btn btn-primary" type="submit">
+			Submit
+		</button>
 	</form>
 </div>
 
 <h1>Manage Assortment</h1>
 <div>
-<table border="1" class="tb">
+<table class="table table-striped">
 	<tr>
 		<th>Product Name</th>
 		<th>Product ID</th>

@@ -8,13 +8,15 @@
 {% block content %}
 <h1>Webshop</h1>
 <div>
-<table border=1" class="tb">
+<table class="table table-striped">
 	<tr>
 		<th>Product Name</th>
 		<th>Product ID</th>
 		<th>Stock</th>
 		<th>Price</th>
+		{% if user.is_authenticated %}
 		<th></th>
+		{% endif %}
 	</tr>
 		{% for product in products %}
 	<tr>

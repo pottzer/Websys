@@ -1,65 +1,29 @@
-body{
-	margin: 0px;
-	background-color: #667c91;
-	padding-bottom: 10px;
+table {
+	margin-left: 50px;
 }
-nav{
+.etc {
+	position: fixed;
+	bottom: 0;
 	width: 100%;
-	background-color: yellow;
-	border: 1px dotted grey;
-	max-height: 340px;
-	padding: 15px;
-	overflow-x: visible;
-	border-top: inset 0 1px 0 rgba(255,255,255,0.1);
-}
-
-navii{
-	width: 80%;
-	overflow: auto;
-	postion: absolute;
+	text-align: center;
 }
 input {
+	background-color: inherit;
 	display: block;
 	border: 1px solid #999;
 	padding: 7px;
+	font-family: 'monospace';
 }
 textarea {
+	background-color: inherit;
 	display: block;
 	width: 375px;
-	height:150px;
+	font-family: 'monospace';
+	height: 150px;
 }
 li {
 	list-style-type: none;
 }
-.content{
-	margin-left: auto;
-	margin-right: auto;
-	margin-top: 20px;
-	width: 50%;
-	min-width: 33em;
-	border: 1px solid black;
-	padding: 10px;
-	background-color: #ccd3da;
-}
-.center{
-	margin-left: auto;
-	margin-right: auto;
-	width: 100%;
-}
-.ext {
-	width: 100%;
-	text-align: center;
-}
-.tb{
-	width: 100%;
-	max-width: 50em;
-	align: center;
-}
-
-.title_head{
-	float: left;
-	margin-right: 15px;
-	padding: 10px;
-	font-size: 150%;
-	position: relative;
+button {
+	margin-top:10px;
 }

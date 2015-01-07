@@ -6,13 +6,13 @@
 <form action="" method="post">
 	{% csrf_token %}
 	{{ form.as_ul }}
-	<input type="submit" value="Apply" />
+	<button type="submit" value="Apply" class="btn btn-primary">Apply</button>
 </form>
 
 {% if user.admin %}
 	<h3>Shopping cart of {{customer.username}}</h3>
 	
-	<table border="1" style="width:500px">
+	<table class="table table-striped">
 		<tr>
 			<th>Product Name</th>
 			<th>Price</th>

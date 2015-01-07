@@ -42,6 +42,9 @@ INSTALLED_APPS = (
     'generic',
     'orders',
     'shopping',
+    
+#Bootstrap APPS
+# 	'bootstrap3',
 )
 
 AUTH_USER_MODEL = 'users.User'

@@ -23,14 +23,14 @@
 	}
 </style>
 
-<table>
+<table style="padding-left: 0px;margin-left: 0px;">
 	<tr>
 		<td>
 			<div class="ex">
 			{% if showReview == True %}
 			<form method="post" action="">
 				{% csrf_token %}
-				<input type="submit" name="postRating" value="Rate it">
+				<button type="submit" name="postRating" value="Rate it"class="btn btn-primary">Rate it</button>
 				{% for field in PostReviewForm %}
 					{{ field }}
 				{% endfor %}
@@ -42,10 +42,11 @@
 		</td>
 	</tr>
 </table>
-<table>
+<table style="padding-left: 0px; margin-left: 0px;">
 	<tr>
 		{% if user.is_authenticated %}
-		<td><a href="{% url 'shopping:AddProductShoppingcart' product.id_good %}"><input type="submit" name="postComment" value="Buy"></a></td>
+		<td><a href="{% url 'shopping:AddProductShoppingcart' product.id_good %}">
+	<button type="submit" name="postComment" value="Buy" class="btn btn-success" style="margin-right:5px;">Buy</button></a><td>
 		{% endif %}
 		<td>Currently {{product.stock}} left in stock</td>
 	</tr>
@@ -59,14 +60,14 @@
 	<form method="post" action="" class="">
 		{% csrf_token %}
 		{{ PostCommentForm.as_ul }}
-		<input type="submit" value="Post">
+		<button type="submit" value="Post" class="btn btn-info">Post</button>
 	</form>
 {% endif %}
 </div>
 <hr>
 <div style="width:500px">
 	{% for comment in comment_list %}
-		<table border="1" style="width:100%"><tbody>
+		<table border="1" style="width:100%;margin:3px;"><tbody>
 			<tr>
 				<td style="font-weight:normal;background-color:grey;" colspan="2">
 					{{ comment.date }}
@@ -83,7 +84,7 @@
 						<div>
 							<b><u>{{ comment.name }}</u></b>
 						</div>
-						<table><tbody><tr><td style="padding:0px !important">{{ comment.role }}</td></tr></tbody></table>
+						<p style="margin: 5px">{{ comment.role }}</p>
 					</div>
 				</td>
 				<td>
