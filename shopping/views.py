@@ -98,6 +98,12 @@ class CheckOutView(View):
 		if lengthInventory == 0:
 			return render(request, self.error_template,)
 				
+		for i in xrange(lengthInventory):
+			item = inventoryList[i]
+			shoppingQuantity = inventoryList[i].quantity
+				
+			if (item.productID.stock - shoppingQuantity) <=0:
+				return render(request, self.error_template)		  
 		O.save()
 		for i in xrange(lengthInventory):
 			item = inventoryList[i]
@@ -106,13 +112,10 @@ class CheckOutView(View):
 			productName = product.name
 			ShoppingQuantity = inventoryList[i].quantity
 			
-			good = Goods.objects.get(id_good = product.id_good)
-			if (good.stock - ShoppingQuantity) >= 0:
-				good.stock = (good.stock - ShoppingQuantity)
-			else:
-				O.delete()
-				return render(request, self.error_template,{'product': product})	
-			good.save()
+			#good = Goods.objects.get(id_good = product.id_good)
+			product.stock = (product.stock - ShoppingQuantity)
+			
+			product.save()
 			OI = OrderItems(productID = product, orderID = O, price = productPrice, name = productName, quantity = ShoppingQuantity)		
 			OI.save()		
 		
